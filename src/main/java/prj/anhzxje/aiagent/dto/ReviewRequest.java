@@ -1,5 +1,6 @@
 package prj.anhzxje.aiagent.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,6 +23,7 @@ public class ReviewRequest {
      *
      * Bắt buộc — không được null hoặc rỗng.
      */
+    @NotBlank(message = "projectPath không được để trống")
     private String projectPath;
 
     /**

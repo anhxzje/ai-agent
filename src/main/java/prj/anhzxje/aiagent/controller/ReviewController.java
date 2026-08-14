@@ -1,25 +1,18 @@
 package prj.anhzxje.aiagent.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
+import prj.anhzxje.aiagent.dto.ReviewJob;
 import prj.anhzxje.aiagent.dto.ReviewRequest;
-import prj.anhzxje.aiagent.dto.ReviewResponse;
+import prj.anhzxje.aiagent.service.ReviewJobService;
 import prj.anhzxje.aiagent.service.ReviewService;
 
 import java.util.Map;
 
-/**
- * REST Controller cho API Code Review.
- *
- * Trách nhiệm:
- * - Nhận HTTP request.
- * - Chuyển request cho ReviewService.
- * - Trả kết quả về HTTP response.
- *
- * Không chứa business logic và không gọi Agent trực tiếp.
- */
 @Slf4j
 @RestController
 @RequestMapping("/api/review")
@@ -27,36 +20,59 @@ import java.util.Map;
 public class ReviewController {
 
     private final ReviewService reviewService;
+    private final ReviewJobService jobService;
 
-    /**
-     * Thực hiện code review cho một project.
-     *
-     * POST /api/review
-     *
-     * Body:
-     * {
-     *     "projectPath": "D:/projects/identity-service",
-     *     "focus": "security"
-     * }
-     */
     @PostMapping
-    public ResponseEntity<ReviewResponse> reviewProject(
-            @RequestBody ReviewRequest request) {
+    public ResponseEntity<Map<String, String>> submitReviewJob(
+            @Valid @RequestBody ReviewRequest request) {
 
-        log.info("Nhận request review project: {}", request.getProjectPath());
+        log.info("Nhận request submit review job: {}", request.getProjectPath());
 
-        ReviewResponse response = reviewService.reviewProject(request);
+        // Validate đường dẫn thực tế trước khi tạo Job
+        reviewService.validateRequest(request);
 
-        log.info("Review hoàn tất. Tổng issues: {}", response.getTotalIssues());
+        // Tạo Job
+        ReviewJob job = jobService.createJob(request);
 
-        return ResponseEntity.ok(response);
+        // Chạy ngầm Async
+        reviewService.processReviewAsync(job.getJobId(), request);
+
+        // Trả về Job ID ngay lập tức (HTTP 202 Accepted)
+        return ResponseEntity.accepted().body(
+                Map.of(
+                        "jobId", job.getJobId(),
+                        "message", "Job đã được đưa vào hàng đợi xử lý."
+                )
+        );
     }
 
-    /**
-     * Xử lý request không hợp lệ.
-     *
-     * Đây là xử lý lỗi cơ bản cho MVP.
-     */
+    @GetMapping("/{jobId}")
+    public ResponseEntity<ReviewJob> getJobStatus(@PathVariable String jobId) {
+        ReviewJob job = jobService.getJob(jobId);
+        
+        if (job == null) {
+            return ResponseEntity.notFound().build();
+        }
+        
+        return ResponseEntity.ok(job);
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<Map<String, String>> handleValidationExceptions(
+            MethodArgumentNotValidException ex) {
+
+        String errorMessage = ex.getBindingResult().getFieldErrors().stream()
+                .map(error -> error.getDefaultMessage())
+                .findFirst()
+                .orElse("Request không hợp lệ");
+
+        log.warn("Lỗi validation request body: {}", errorMessage);
+
+        return ResponseEntity.badRequest().body(
+                Map.of("error", errorMessage)
+        );
+    }
+
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, String>> handleBadRequest(
             IllegalArgumentException e) {

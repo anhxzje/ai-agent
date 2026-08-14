@@ -173,10 +173,6 @@ public class CodeReviewAgent {
                 .call()
                 .content();
 
-        System.out.println("===== RAW AGENT RESPONSE =====");
-        System.out.println(result);
-        System.out.println("===== END AGENT RESPONSE =====");
-
         return result;
     }
 
