@@ -1,4 +1,4 @@
-package prj.anhzxje.aiagent.dto;
+package prj.anhzxje.aiagent.enums;
 
 public enum JobStatus {
     PENDING,

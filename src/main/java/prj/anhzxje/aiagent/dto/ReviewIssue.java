@@ -4,6 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import prj.anhzxje.aiagent.enums.Category;
+import prj.anhzxje.aiagent.enums.Severity;
 
 /**
  * Đại diện cho một vấn đề được phát hiện trong quá trình code review.

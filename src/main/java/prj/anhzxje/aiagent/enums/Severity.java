@@ -1,4 +1,4 @@
-package prj.anhzxje.aiagent.dto;
+package prj.anhzxje.aiagent.enums;
 
 /**
  * Mức độ nghiêm trọng của issue được phát hiện.

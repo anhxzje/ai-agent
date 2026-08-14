@@ -8,13 +8,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import prj.anhzxje.aiagent.agent.CodeReviewAgent;
-import prj.anhzxje.aiagent.dto.Category;
-import prj.anhzxje.aiagent.dto.JobStatus;
+import prj.anhzxje.aiagent.enums.Category;
+import prj.anhzxje.aiagent.enums.JobStatus;
 import prj.anhzxje.aiagent.dto.ReviewIssue;
-import prj.anhzxje.aiagent.dto.ReviewJob;
+import prj.anhzxje.aiagent.model.ReviewJob;
 import prj.anhzxje.aiagent.dto.ReviewRequest;
 import prj.anhzxje.aiagent.dto.ReviewResponse;
-import prj.anhzxje.aiagent.dto.Severity;
+import prj.anhzxje.aiagent.enums.Severity;
 
 import java.nio.file.Files;
 import java.nio.file.Path;

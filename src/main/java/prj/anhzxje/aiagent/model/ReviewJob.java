@@ -1,7 +1,10 @@
-package prj.anhzxje.aiagent.dto;
+package prj.anhzxje.aiagent.model;
 
 import lombok.Builder;
 import lombok.Data;
+import prj.anhzxje.aiagent.dto.ReviewRequest;
+import prj.anhzxje.aiagent.dto.ReviewResponse;
+import prj.anhzxje.aiagent.enums.JobStatus;
 
 import java.time.LocalDateTime;
 

@@ -6,7 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
-import prj.anhzxje.aiagent.dto.ReviewJob;
+import prj.anhzxje.aiagent.model.ReviewJob;
 import prj.anhzxje.aiagent.dto.ReviewRequest;
 import prj.anhzxje.aiagent.service.ReviewJobService;
 import prj.anhzxje.aiagent.service.ReviewService;

@@ -3,8 +3,8 @@ package prj.anhzxje.aiagent.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import prj.anhzxje.aiagent.dto.JobStatus;
-import prj.anhzxje.aiagent.dto.ReviewJob;
+import prj.anhzxje.aiagent.enums.JobStatus;
+import prj.anhzxje.aiagent.model.ReviewJob;
 import prj.anhzxje.aiagent.dto.ReviewRequest;
 import prj.anhzxje.aiagent.dto.ReviewResponse;
 
