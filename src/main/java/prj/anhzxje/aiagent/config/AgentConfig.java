@@ -14,8 +14,8 @@ import java.util.concurrent.Executor;
 @EnableScheduling
 public class AgentConfig {
 
-    @Bean(name = "agentTaskExecutor")
-    public Executor agentTaskExecutor() {
+    @Bean(name = "agentThreadPoolExecutor")
+    public Executor agentThreadPoolExecutor() {
         ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
         executor.setCorePoolSize(5); // Chỉ cho phép chạy tối đa 5 agent đồng thời để tránh quá tải
         executor.setMaxPoolSize(10);

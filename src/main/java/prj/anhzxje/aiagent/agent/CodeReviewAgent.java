@@ -19,9 +19,7 @@ import java.util.List;
 
 /**
  * AI Agent thực hiện code review bằng cách tự khám phá codebase.
- *
  * Trách nhiệm: CHỈ lo reasoning + tool calling + prompt.
- * KHÔNG tự parse JSON kết quả — việc đó thuộc về ReviewService.
  */
 @Component
 public class CodeReviewAgent {
