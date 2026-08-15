@@ -57,7 +57,7 @@ public class SecurityConfig {
                                 .message("Unauthorized: " + authException.getMessage())
                                 .path(request.getRequestURI())
                                 .timestamp(LocalDateTime.now())
-                                .build();
+                                   .build();
                         response.getWriter().write(objectMapper.writeValueAsString(errorResponse));
                     })
                     .accessDeniedHandler((request, response, accessDeniedException) -> {

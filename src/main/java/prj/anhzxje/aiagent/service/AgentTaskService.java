@@ -1,6 +1,5 @@
 package prj.anhzxje.aiagent.service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -16,7 +15,6 @@ import prj.anhzxje.aiagent.repository.AgentTaskRepository;
 import prj.anhzxje.aiagent.repository.ProjectRepository;
 import prj.anhzxje.aiagent.security.CustomUserDetails;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -30,7 +28,6 @@ public class AgentTaskService {
 
     private final AgentTaskRepository agentTaskRepository;
     private final ProjectRepository projectRepository;
-    private final ObjectMapper objectMapper;
     private final AgentTaskExecutor agentTaskExecutor;
 
     /**
@@ -62,7 +59,7 @@ public class AgentTaskService {
                 saved.getId(), saved.getType(), project.getName());
 
         // Kích hoạt Agent xử lý ngầm (True Async via AgentTaskExecutor Spring Bean)
-        agentTaskExecutor.executeTaskAsync(saved.getId(), project.getPath(), request.getInput());
+        agentTaskExecutor.executeTaskAsync(saved.getId(), project.getPath(), request.getInput(), request.getType());
 
         return toResponse(saved);
     }
@@ -108,47 +105,6 @@ public class AgentTaskService {
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Cập nhật trạng thái task (dùng nội bộ bởi Agent executor).
-     */
-    public void updateStatus(Long taskId, JobStatus status) {
-        AgentTask task = agentTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy task với id: " + taskId));
-        task.setStatus(status);
-        if (status == JobStatus.COMPLETED || status == JobStatus.ERROR) {
-            task.setCompletedAt(LocalDateTime.now());
-        }
-        agentTaskRepository.save(task);
-    }
-
-    /**
-     * Hoàn thành task với output JSON.
-     */
-    public void completeTask(Long taskId, String outputJson) {
-        AgentTask task = agentTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy task với id: " + taskId));
-        task.setOutput(outputJson);
-        task.setStatus(JobStatus.COMPLETED);
-        task.setCompletedAt(LocalDateTime.now());
-        agentTaskRepository.save(task);
-        log.info("AgentTask [id={}] hoàn thành", taskId);
-    }
-
-    /**
-     * Đánh dấu task bị lỗi.
-     */
-    public void failTask(Long taskId, String errorMessage) {
-        AgentTask task = agentTaskRepository.findById(taskId)
-                .orElseThrow(() -> new ResourceNotFoundException(
-                        "Không tìm thấy task với id: " + taskId));
-        task.setErrorMessage(errorMessage);
-        task.setStatus(JobStatus.ERROR);
-        task.setCompletedAt(LocalDateTime.now());
-        agentTaskRepository.save(task);
-        log.error("AgentTask [id={}] thất bại: {}", taskId, errorMessage);
-    }
 
     // ────────────────────────────────────────────────
     // Helpers

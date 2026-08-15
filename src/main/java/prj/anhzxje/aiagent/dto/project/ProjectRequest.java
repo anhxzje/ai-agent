@@ -18,6 +18,7 @@ public class ProjectRequest {
     @Size(max = 500, message = "Mô tả tối đa 500 ký tự")
     private String description;
 
+    @NotBlank(message = "Đường dẫn project không được để trống")
     @Size(max = 500, message = "Đường dẫn tối đa 500 ký tự")
     private String path;
 
