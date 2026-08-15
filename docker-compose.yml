@@ -20,6 +20,7 @@ services:
 
   # 2. AI Agent Application Container
   app:
+    image: anhzxje/ai_agent:latest
     build:
       context: .
       dockerfile: Dockerfile

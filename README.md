@@ -77,7 +77,44 @@ src/main/java/prj/anhzxje/aiagent/
 - **AI Framework**: Spring AI (`spring-ai-starter-model-google-genai`) & `spring-ai-agent-utils`
 - **Security**: Spring Security & JJWT (Java JWT)
 - **Database**: MySQL 8.x + Spring Data JPA (Hibernate 7.x)
+- **Containerization**: Docker, Docker Compose (Multi-stage build)
 - **Utilities**: Lombok, Jackson (ObjectMapper)
+
+---
+
+## 🐳 Triển khai nhanh bằng Docker & Docker Hub
+
+Docker Image đã được đóng gói sẵn và phát hành trên Docker Hub:
+👉 **Docker Hub Repository**: [anhzxje/ai_agent](https://hub.docker.com/repository/docker/anhzxje/ai_agent/general)
+
+### 1. Kéo Image trực tiếp từ Docker Hub
+```bash
+docker pull anhzxje/ai_agent:latest
+```
+
+### 2. Khởi chạy 1-Click với Docker Compose (App + MySQL)
+
+Dự án hỗ trợ sẵn **`docker-compose.yml`** giúp khởi chạy trọn bộ (App Container + MySQL Container) mà **không cần cài đặt Java, Maven hay MySQL trên máy local**.
+
+```bash
+# Khởi chạy trên Linux / macOS
+GOOGLE_API_KEY="AIzaSyYourGeminiApiKeyHere" docker compose up -d
+
+# Hoặc trên Windows PowerShell:
+$env:GOOGLE_API_KEY="AIzaSyYourGeminiApiKeyHere"
+docker compose up -d
+```
+Hệ thống sẽ tự động tạo cơ sở dữ liệu `aiagent_db` trong MySQL container và khởi chạy server Spring Boot tại `http://localhost:8080`.
+
+### 3. Mount Thư mục Code để AI Agent Review
+Trong `docker-compose.yml`, thư mục ổ đĩa local được mount vào container qua trường `volumes`:
+```yaml
+services:
+  app:
+    volumes:
+      - D:/projects:/workspace   # Ánh xạ thư mục D:/projects trên máy thật vào /workspace trong Container
+```
+Khi tạo Task review qua API `POST /api/tasks`, bạn truyền `projectPath: "/workspace/my-app"`.
 
 ---
 
