@@ -1,5 +1,6 @@
 package prj.anhzxje.aiagent.dto.task;
 
+import com.fasterxml.jackson.annotation.JsonRawValue;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,8 +20,13 @@ public class AgentTaskResponse {
     private String projectName;
     private TaskType type;
     private JobStatus status;
+
+    @JsonRawValue
     private String input;
+
+    @JsonRawValue
     private String output;
+
     private String errorMessage;
     private LocalDateTime createdAt;
     private LocalDateTime completedAt;
